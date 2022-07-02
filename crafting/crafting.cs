@@ -33,7 +33,7 @@ public class crafting : Mod
     {
         Traverse.Create(pResultItem.settings_recipe).Field("newCostToCraft").SetValue(pCosts);
         Traverse.Create(pResultItem.settings_recipe).Field("learned").SetValue(false);
-        Traverse.Create(pResultItem.settings_recipe).Field("learnedFromBeginning").SetValue(true);
+        Traverse.Create(pResultItem.settings_recipe).Field("learnedFromBeginning").SetValue(false);
         Traverse.Create(pResultItem.settings_recipe).Field("craftingCategory").SetValue(CraftingCategory.Decorations);
         Traverse.Create(pResultItem.settings_recipe).Field("amountToCraft").SetValue(pAmount);
     }
