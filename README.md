@@ -3,6 +3,7 @@
 
 <img
     src = 'crafting/icon.png'
+    align = right
     width = 120
 />
 
