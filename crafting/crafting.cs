@@ -12,32 +12,32 @@ public class crafting : Mod {
     public void Start(){
 
         Item_Base[]
-            color_yellow = colorbase("Color_yellow") ,
-            color_black = colorbase("Color_Black") ,
-            color_white = colorbase("Color_White") ,
-            color_blue = colorbase("Color_Blue") ,
-            color_red = colorbase("Color_Red") ;
+            color_yellow = itembase("Color_yellow") ,
+            color_black = itembase("Color_Black") ,
+            color_white = itembase("Color_White") ,
+            color_blue = itembase("Color_Blue") ,
+            color_red = itembase("Color_Red") ;
 
 
         cassetteRecipe("Cassette_EDM",
-            new CostMultiple(blackColor,1),
-            new CostMultiple(blueColor,1),
-            new CostMultiple(redColor,1));
+            new CostMultiple(color_black,1),
+            new CostMultiple(color_blue,1),
+            new CostMultiple(color_red,1));
 
         cassetteRecipe("Cassette_Classical",
-            new CostMultiple(yellowColor,1),
-            new CostMultiple(blackColor,1),
-            new CostMultiple(redColor,1));
+            new CostMultiple(color_yellow,1),
+            new CostMultiple(color_black,1),
+            new CostMultiple(color_red,1));
         
         cassetteRecipe("Cassette_Pop",
-            new CostMultiple(whiteColor,1),
-            new CostMultiple(redColor,2));
+            new CostMultiple(color_white,1),
+            new CostMultiple(color_red,2));
         
         cassetteRecipe("Cassette_Elevator",
-            new CostMultiple(whiteColor,3));
+            new CostMultiple(color_white,3));
 
         cassetteRecipe("Cassette_Rock",
-            new CostMultiple(blackColor,3));
+            new CostMultiple(color_black,3));
 
 
         Debug.Log("Mod crafting Cassette has been loaded!");
@@ -49,10 +49,10 @@ public class crafting : Mod {
      */
 
     private static List<CostMultiple> baseCost = new List<CostMultiple>() {
-        new CostMultiple(plastic,4),
-        new CostMultiple(copper,1),
-        new CostMultiple(board,1),
-        new CostMultiple(bolt,2)
+        new CostMultiple(itembase("CircuitBoard"),1),
+        new CostMultiple(itembase("CopperIngot"),1),
+        new CostMultiple(itembase("Plastic"),4),
+        new CostMultiple(itembase("Bolt"),2)
     };
 
 
