@@ -63,10 +63,10 @@ public class crafting : Mod {
     private static void cassetteRecipe(string type,params CostMultiple [] specific){
 
         var cost = new List<CostMultiple>(baseCost);
-        cost.addRange(specific);
+        cost.AddRange(specific);
 
         var result = ItemManager.GetItemByName(type);
-        recipe(result,1,cost.toArray());
+        recipe(result,1,cost.ToArray());
     }
 
 
