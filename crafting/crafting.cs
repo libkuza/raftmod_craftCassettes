@@ -12,7 +12,7 @@ public class crafting : Mod {
     public void Start(){
 
         Item_Base[]
-            color_yellow = itembase("Color_yellow") ,
+            color_yellow = itembase("Color_Yellow") ,
             color_black = itembase("Color_Black") ,
             color_white = itembase("Color_White") ,
             color_blue = itembase("Color_Blue") ,
