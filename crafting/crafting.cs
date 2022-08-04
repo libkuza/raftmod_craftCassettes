@@ -1,45 +1,106 @@
-﻿using HarmonyLib;
+
+using HarmonyLib;
 using UnityEngine;
+using System.Collections.Generic;
+
+public class crafting : Mod {
+
+    public void OnModUnload(){
+        Debug.Log("Mod crafting Cassette has been unloaded!");
+    }
+
+    public void Start(){
+
+        Item_Base[]
+            color_yellow = itembase("Color_Yellow") ,
+            color_black = itembase("Color_Black") ,
+            color_white = itembase("Color_White") ,
+            color_blue = itembase("Color_Blue") ,
+            color_red = itembase("Color_Red") ;
 
 
-public class crafting : Mod
-{
-    public void Start()
-    {
-        Item_Base[] blackColor = new Item_Base[] { ItemManager.GetItemByName("Color_Black") };
-        Item_Base[] whiteColor = new Item_Base[] { ItemManager.GetItemByName("Color_White") };
-        Item_Base[] redColor = new Item_Base[] { ItemManager.GetItemByName("Color_Red") };
-        Item_Base[] blueColor = new Item_Base[] { ItemManager.GetItemByName("Color_Blue") };
-        Item_Base[] yellowColor = new Item_Base[] { ItemManager.GetItemByName("Color_Yellow") };
+        cassetteRecipe("Cassette_EDM",
+            new CostMultiple(color_black,1),
+            new CostMultiple(color_blue,1),
+            new CostMultiple(color_red,1));
 
-        Item_Base[] board = new Item_Base[] { ItemManager.GetItemByName("CircuitBoard") };
-        Item_Base[] plastic = new Item_Base[] { ItemManager.GetItemByName("Plastic") };
-        Item_Base[] copper = new Item_Base[] { ItemManager.GetItemByName("CopperIngot") };
-        Item_Base[] bolt = new Item_Base[] { ItemManager.GetItemByName("Bolt") };
+        cassetteRecipe("Cassette_Classical",
+            new CostMultiple(color_yellow,1),
+            new CostMultiple(color_black,1),
+            new CostMultiple(color_red,1));
+        
+        cassetteRecipe("Cassette_Pop",
+            new CostMultiple(color_white,1),
+            new CostMultiple(color_red,2));
+        
+        cassetteRecipe("Cassette_Elevator",
+            new CostMultiple(color_white,3));
 
-        CreateRecipe(ItemManager.GetItemByName("Cassette_Rock"), 1, new CostMultiple(blackColor, 3), new CostMultiple(board, 1), new CostMultiple(plastic, 4),  new CostMultiple(bolt, 2), new CostMultiple(copper, 1));
-        CreateRecipe(ItemManager.GetItemByName("Cassette_EDM"), 1, new CostMultiple(blackColor, 1), new CostMultiple(blueColor, 1), new CostMultiple(redColor, 1), new CostMultiple(board, 1), new CostMultiple(plastic, 4), new CostMultiple(bolt, 2), new CostMultiple(copper, 1));
-        CreateRecipe(ItemManager.GetItemByName("Cassette_Classical"), 1, new CostMultiple(blackColor, 1), new CostMultiple(yellowColor, 1), new CostMultiple(redColor, 1), new CostMultiple(board, 1), new CostMultiple(plastic, 4), new CostMultiple(bolt, 2), new CostMultiple(copper, 1));
-        CreateRecipe(ItemManager.GetItemByName("Cassette_Pop"), 1, new CostMultiple(whiteColor, 1), new CostMultiple(redColor, 2), new CostMultiple(board, 1), new CostMultiple(plastic, 4), new CostMultiple(bolt, 2), new CostMultiple(copper, 1));
-        CreateRecipe(ItemManager.GetItemByName("Cassette_Elevator"), 1, new CostMultiple(whiteColor, 3), new CostMultiple(board, 1), new CostMultiple(plastic, 4), new CostMultiple(bolt, 2), new CostMultiple(copper, 1));
-
+        cassetteRecipe("Cassette_Rock",
+            new CostMultiple(color_black,3));
 
 
         Debug.Log("Mod crafting Cassette has been loaded!");
     }
 
-    
-    public static void CreateRecipe(Item_Base pResultItem, int pAmount, params CostMultiple[] pCosts)
-    {
-        Traverse.Create(pResultItem.settings_recipe).Field("newCostToCraft").SetValue(pCosts);
-        Traverse.Create(pResultItem.settings_recipe).Field("learned").SetValue(false);
-        Traverse.Create(pResultItem.settings_recipe).Field("learnedFromBeginning").SetValue(false);
-        Traverse.Create(pResultItem.settings_recipe).Field("craftingCategory").SetValue(CraftingCategory.Decorations);
-        Traverse.Create(pResultItem.settings_recipe).Field("amountToCraft").SetValue(pAmount);
+
+    /*
+     *  Items needed for every cassette.
+     */
+
+    private static List<CostMultiple> baseCost = new List<CostMultiple>() {
+        new CostMultiple(itembase("CircuitBoard"),1),
+        new CostMultiple(itembase("CopperIngot"),1),
+        new CostMultiple(itembase("Plastic"),4),
+        new CostMultiple(itembase("Bolt"),2)
+    };
+
+
+    /*
+     *  Create a cassette recipe.
+     */
+
+    private static void cassetteRecipe(string type,params CostMultiple [] specific){
+
+        var cost = new List<CostMultiple>(baseCost);
+        cost.AddRange(specific);
+
+        var result = ItemManager.GetItemByName(type);
+        recipe(result,1,cost.ToArray());
     }
 
-    public void OnModUnload()
-    {
-        Debug.Log("Mod crafting Cassette has been unloaded!");
+
+    /*
+     *  Create a generic recipe.
+     */
+
+    private static void recipe(Item_Base result,int amount,params CostMultiple [] cost){
+        
+        var recipe = Traverse.Create(result.settings_recipe);
+        
+        recipe
+        .Field("newCostToCraft")
+        .SetValue(cost);
+
+        recipe
+        .Field("learned")
+        .SetValue(false);
+
+        recipe
+        .Field("learnedFromBeginning")
+        .SetValue(false);
+
+        recipe
+        .Field("craftingCategory")
+        .SetValue(CraftingCategory.Decorations);
+
+        recipe
+        .Field("amountToCraft")
+        .SetValue(amount);
+    }
+
+
+    private static Item_Base [] itembase(string name){
+        return new Item_Base[] { ItemManager.GetItemByName(name) };
     }
 }
